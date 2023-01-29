@@ -35,6 +35,11 @@ table {
 	text-align: center;
 	width: 18vh;
 	height: 18vh;
+	cursor: pointer;
+}
+
+.box:hover {
+	background: lightgray;
 }
 
 #gameState{

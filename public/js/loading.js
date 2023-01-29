@@ -22,9 +22,9 @@ var increase = true
 function changeBgColor(number){
 	document.getElementById("loadingContainer").style.backgroundColor = "rgba(" + optionList[0] + "," + optionList[1] + "," + optionList[2] + ", 1)"
 	
-	if (optionList[number] == 255){
+	if (optionList[number] === 255){
 		increase = false
-	}else if (optionList[number] == 150){
+	}else if (optionList[number] === 150){
 		increase = true
 	}
 
@@ -33,7 +33,7 @@ function changeBgColor(number){
 			optionList[number] ++
 		}
 		
-		if (optionList[number] == 255){
+		if (optionList[number] === 255){
 			pickNumber = getRandomInt(0, 2)
 		}
 		
@@ -42,7 +42,7 @@ function changeBgColor(number){
 			optionList[number] --
 		}
 		
-		if (optionList[number] == 150){
+		if (optionList[number] === 150){
 			pickNumber = getRandomInt(0, 2)	
 		}
 	}

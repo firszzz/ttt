@@ -63,7 +63,7 @@ function sandwichWithSpinners(elementId, sandwichText){
 function createRematchButton(){	
 	var rematchBtn = document.createElement("button")
 	
-	var rematchText = document.createTextNode("Rematch?")
+	var rematchText = document.createTextNode("Сыграть снова?")
 	
 	rematchBtn.appendChild(rematchText)
 	rematchBtn.setAttribute("id", "rematchButton")
@@ -80,7 +80,7 @@ function createFindGameButton(){
 	findGame.setAttribute("id", "findGameButton")
 	findGame.setAttribute("onClick", "refreshPage()")
 	
-	var findGameText = document.createTextNode("Find New Game")
+	var findGameText = document.createTextNode("Найти новую игру")
 	
 	findGame.appendChild(findGameText)
 	
@@ -111,11 +111,11 @@ function checkTurn(){
 	var turnText;
 	if (yourTurn){
 		clearInterval(loop)
-		turnText = "Your Turn"
+		turnText = "Ваш ход"
 		document.getElementById("turn").innerHTML = turnText
 		document.getElementById("turn").className = "yourTurn"
 	}else{
-		turnText = " Oponnent's Turn "
+		turnText = "Ход соперника "
 		document.getElementById("turn").className = "notYourTurn"
 		sandwichWithSpinners("turn", turnText)
 		
@@ -134,10 +134,10 @@ socket.on("connect", function(){
 //Gets player info and initializes turn, data and letter
 socket.on("playersJoined", function(joinInfo){
 	playerData = joinInfo
-	if (playerData.roomType == "private"){
-		document.getElementById("roomId").innerHTML = "Room Code: " + joinInfo.roomId
+	if (playerData.roomType === "private"){
+		document.getElementById("roomId").innerHTML = "Номер комнаты: " + joinInfo.roomId
 	}
-	document.getElementById("player").innerHTML = "Your Letter: " + joinInfo.letter
+	document.getElementById("player").innerHTML = "Ваш знак: " + joinInfo.letter
 })
 
 function removeSearchAction(){
@@ -179,24 +179,24 @@ function playerDisconnected(text){
 	document.getElementById("gameState").innerHTML = text
 	
 	document.getElementById("turn").innerHTML = ""
-	if (playerData.roomType == "random"){
+	if (playerData.roomType === "random"){
 		createFindGameButton()
 	}
 	canPlay = false
 }
 
 socket.on("gameNotExist", function(roomId){
-	document.getElementById("searchState").innerHTML = "Room " + roomId + " does not exist."
+	document.getElementById("searchState").innerHTML = "Комната №" + roomId + " не существует"
 })
 
 //Runs when other player disconnected
 socket.on("playerDisconnect", function(){
-	playerDisconnected("Opponent Disconnected")
+	playerDisconnected("Соперник отключился")
 })
 
 function restartGame(){
 	document.getElementById("rematchButton").remove()
-	sandwichWithSpinners("gameState", " Waiting for Opponent ")
+	sandwichWithSpinners("gameState", " Ожидание соперника ")
 
 	var roomId = playerData.roomId
 	socket.emit("restartGame", roomId)
@@ -225,9 +225,9 @@ function endGameInit(){
 
 socket.on("winnerDetermined", function(winner){
 	if (winner.youWon){
-		document.getElementById("gameState").innerHTML = "You Won!"
+		document.getElementById("gameState").innerHTML = "Вы победили!"
 	}else{
-		document.getElementById("gameState").innerHTML = "You Lost..."
+		document.getElementById("gameState").innerHTML = "Вы проиграли..."
 	}
 	
 	addLetterToScoreboard(winner.winningLetter)
@@ -237,15 +237,15 @@ socket.on("winnerDetermined", function(winner){
 
 //Changes class of box based on the letter that is in it
 function addClassByLetter(boxId, letter){
-	if (letter == "X"){
+	if (letter === "X"){
 		document.getElementById(boxId).className += " playerX" 
-	}else if (letter == "O"){
+	}else if (letter === "O"){
 		document.getElementById(boxId).className += " playerO"
 	}
 }
 
 socket.on("tie", function(){
-	document.getElementById("gameState").innerHTML = "You tied"
+	document.getElementById("gameState").innerHTML = "Ничья!"
 	endGameInit()
 	addLetterToScoreboard("tie")
 })
@@ -278,7 +278,7 @@ socket.on("yourTurn", function(info){
 function areEqual(){
 	var len = arguments.length;
 	for (var i = 1; i< len; i++){
-		if (arguments[i] == null || arguments[i] == "" || arguments[i] != arguments[i-1]){
+		if (arguments[i] == null || arguments[i] === "" || arguments[i] !== arguments[i-1]){
 			return false;
 		}
 	}
@@ -289,7 +289,7 @@ function checkTie(){
 	isTie = true
 	for (var i = 1; i < 10; i ++){
 		var box = document.getElementById(i.toString()).innerHTML
-		if (box == "" || box == null){
+		if (box === "" || box == null){
 			isTie = false
 		}
 	}
@@ -365,7 +365,7 @@ function checkWinner(){
 function boxClick(box){
 	if (canPlay){
 		if (yourTurn){
-			if ( document.getElementById(box.id).innerHTML == ""){
+			if ( document.getElementById(box.id).innerHTML === ""){
 				document.getElementById(box.id).innerHTML = playerData.letter
 				
 				addClassByLetter(box.id, playerData.letter)
